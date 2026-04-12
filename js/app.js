@@ -11,14 +11,19 @@ import { SummaryView }  from './views/summaryView.js';
 
 export class App {
   constructor() {
+    // ── Theme ─────────────────────────────────────────────────────────────────
+    // (Also applied early via inline script in index.html to avoid FOUC)
+    const savedTheme = localStorage.getItem('casinoToolkit_theme') || 'dark';
+    document.documentElement.dataset.theme = savedTheme;
+
     // ── State ─────────────────────────────────────────────────────────────────
-    this.settings    = loadSettings();
-    this.casinoData  = loadCasinoData(this.settings);
+    this.settings   = loadSettings();
+    this.casinoData = loadCasinoData(this.settings);
 
     // ── Router ────────────────────────────────────────────────────────────────
     this.router = new Router();
 
-    // ── Views (one instance each) ─────────────────────────────────────────────
+    // ── Views ─────────────────────────────────────────────────────────────────
     this._views = {
       main:     new MainView(this),
       editTips: new EditTipsView(this),
@@ -31,21 +36,25 @@ export class App {
 
     // ── Routes ────────────────────────────────────────────────────────────────
     this.router
-      .on('/',                     ()       => this._show('main'))
-      .on('/edit-tips/:tableId',   params   => this._show('editTips', params))
-      .on('/edit-wins/:tableId',   params   => this._show('editWins', params))
-      .on('/settings',             ()       => this._show('settings'))
-      .on('/summary',              ()       => this._show('summary'));
+      .on('/',                   ()     => this._show('main'))
+      .on('/edit-tips/:tableId', p      => this._show('editTips', p))
+      .on('/edit-wins/:tableId', p      => this._show('editWins', p))
+      .on('/settings',           ()     => this._show('settings'))
+      .on('/summary',            ()     => this._show('summary'));
 
-    // Fire initial route
     this.router.dispatch();
   }
 
-  // ── Public helpers (used by views) ────────────────────────────────────────
+  // ── Public ────────────────────────────────────────────────────────────────
 
-  /** Persist casino data to localStorage */
   save() {
     saveCasinoData(this.casinoData);
+  }
+
+  toggleTheme() {
+    const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+    document.documentElement.dataset.theme = next;
+    localStorage.setItem('casinoToolkit_theme', next);
   }
 
   // ── Private ───────────────────────────────────────────────────────────────
@@ -58,4 +67,9 @@ export class App {
 // ── Boot ──────────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   window.app = new App();
+
+  // Register service worker for PWA offline support
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./sw.js').catch(() => {});
+  }
 });

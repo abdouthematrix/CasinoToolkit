@@ -13,6 +13,7 @@ export class MainView extends BaseView {
     const data      = this.app.casinoData;
     const totalTips = calcCasinoTotalTips(data);
     const totalWins = calcCasinoTotalWins(data);
+    const isDark    = document.documentElement.dataset.theme !== 'light';
 
     const sections = data.sections.map(s => this._section(s)).join('');
 
@@ -21,6 +22,10 @@ export class MainView extends BaseView {
         <div class="logo">Casino Toolkit<span>Daily Tracker</span></div>
         <div class="nav-actions">
           <button class="btn btn-secondary" id="btn-summary">Summary</button>
+          <button class="btn-icon" id="btn-theme" title="Toggle theme"
+                  aria-label="Toggle light/dark mode">
+            ${isDark ? '☀' : '🌙'}
+          </button>
           <button class="btn-icon" id="btn-settings" title="Settings">⚙</button>
         </div>
       </div>
@@ -96,6 +101,11 @@ export class MainView extends BaseView {
   bindEvents() {
     this.on('#btn-summary',  'click', () => this.app.router.navigate('/summary'));
     this.on('#btn-settings', 'click', () => this.app.router.navigate('/settings'));
+    this.on('#btn-theme',    'click', () => {
+      this.app.toggleTheme();
+      // Re-render to update the icon
+      this.mount(this.container, {});
+    });
 
     this.onAll('[data-action]', 'click', e => {
       const { action, id } = e.currentTarget.dataset;

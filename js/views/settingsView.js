@@ -9,7 +9,7 @@ import {
 export class SettingsView extends BaseView {
 
   render() {
-    const { sectionsData, denominationTypes } = this.app.settings;
+    const { sectionsData, denominationTypes, plaqueTypes } = this.app.settings;
 
     const sectionsHtml = sectionsData.map((si, i) => /* html */`
       <div class="section-info-row">
@@ -36,6 +36,17 @@ export class SettingsView extends BaseView {
       </div>
     `).join('');
 
+    const plaquesHtml = (plaqueTypes ?? []).map((pt, i) => /* html */`
+      <div class="denom-type-row">
+        <input class="form-input pt-name" type="text"
+               placeholder="Label" value="${this._esc(pt.name)}" data-idx="${i}">
+        <input class="form-input pt-value" type="number" inputmode="decimal"
+               placeholder="Value" value="${pt.value}" data-idx="${i}">
+        <button class="btn btn-danger rm-plaque" data-idx="${i}"
+                style="padding:8px 10px;flex-shrink:0">✕</button>
+      </div>
+    `).join('');
+
     return /* html */`
       <div class="page-header">
         <button class="back-btn" id="btn-back">← Back</button>
@@ -49,11 +60,18 @@ export class SettingsView extends BaseView {
         <button class="btn btn-secondary mt-1" id="btn-add-section">+ Add Section</button>
       </div>
 
-      <!-- Denominations -->
+      <!-- Tip Denominations -->
       <div class="settings-section">
-        <div class="settings-section-title">Denomination Types</div>
+        <div class="settings-section-title">Tip Denomination Types</div>
         <div id="denoms-list">${denomsHtml}</div>
         <button class="btn btn-secondary mt-1" id="btn-add-denom">+ Add Denomination</button>
+      </div>
+
+      <!-- Plaque Denominations -->
+      <div class="settings-section">
+        <div class="settings-section-title">Plaque Types</div>
+        <div id="plaques-list">${plaquesHtml}</div>
+        <button class="btn btn-secondary mt-1" id="btn-add-plaque">+ Add Plaque Type</button>
       </div>
 
       <!-- Danger zone -->
@@ -86,6 +104,12 @@ export class SettingsView extends BaseView {
       this.mount(this.container, {});
     });
 
+    this.on('#btn-add-plaque', 'click', () => {
+      if (!this.app.settings.plaqueTypes) this.app.settings.plaqueTypes = [];
+      this.app.settings.plaqueTypes.push({ name: '$', value: 0 });
+      this.mount(this.container, {});
+    });
+
     // ── Remove rows ───────────────────────────────────────────────────────────
     this.onAll('.rm-section', 'click', e => {
       const i = parseInt(e.currentTarget.dataset.idx);
@@ -98,31 +122,36 @@ export class SettingsView extends BaseView {
     });
 
     this.onAll('.rm-denom', 'click', e => {
-      const i = parseInt(e.currentTarget.dataset.idx);
-      this.app.settings.denominationTypes.splice(i, 1);
+      this.app.settings.denominationTypes.splice(parseInt(e.currentTarget.dataset.idx), 1);
+      this.mount(this.container, {});
+    });
+
+    this.onAll('.rm-plaque', 'click', e => {
+      this.app.settings.plaqueTypes.splice(parseInt(e.currentTarget.dataset.idx), 1);
       this.mount(this.container, {});
     });
 
     // ── Live edits ────────────────────────────────────────────────────────────
     this.onAll('.si-name', 'input', e => {
-      const i = parseInt(e.target.dataset.idx);
-      this.app.settings.sectionsData[i].name = e.target.value;
+      this.app.settings.sectionsData[parseInt(e.target.dataset.idx)].name = e.target.value;
     });
-
     this.onAll('.si-tables', 'input', e => {
-      const i = parseInt(e.target.dataset.idx);
-      this.app.settings.sectionsData[i].tablesNames =
+      this.app.settings.sectionsData[parseInt(e.target.dataset.idx)].tablesNames =
         e.target.value.split(',').map(s => s.trim()).filter(Boolean);
     });
-
     this.onAll('.dt-name', 'input', e => {
-      const i = parseInt(e.target.dataset.idx);
-      this.app.settings.denominationTypes[i].name = e.target.value;
+      this.app.settings.denominationTypes[parseInt(e.target.dataset.idx)].name = e.target.value;
     });
-
     this.onAll('.dt-value', 'input', e => {
-      const i = parseInt(e.target.dataset.idx);
-      this.app.settings.denominationTypes[i].value = parseFloat(e.target.value) || 0;
+      this.app.settings.denominationTypes[parseInt(e.target.dataset.idx)].value =
+        parseFloat(e.target.value) || 0;
+    });
+    this.onAll('.pt-name', 'input', e => {
+      this.app.settings.plaqueTypes[parseInt(e.target.dataset.idx)].name = e.target.value;
+    });
+    this.onAll('.pt-value', 'input', e => {
+      this.app.settings.plaqueTypes[parseInt(e.target.dataset.idx)].value =
+        parseFloat(e.target.value) || 0;
     });
 
     // ── Save ──────────────────────────────────────────────────────────────────
@@ -155,8 +184,9 @@ export class SettingsView extends BaseView {
     });
   }
 
-  /** Escape HTML special chars for attribute/text safety */
   _esc(str) {
-    return String(str ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    return String(str ?? '').replace(/[&<>"']/g, c =>
+      ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c])
+    );
   }
 }

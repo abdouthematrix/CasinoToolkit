@@ -1,0 +1,29 @@
+{
+  "name": "Casino Toolkit",
+  "short_name": "CasinoKit",
+  "description": "Daily casino tracker for tips and wins across all tables and sections",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#07100a",
+  "theme_color": "#07100a",
+  "categories": ["finance", "utilities"],
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "any",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Summary",
+      "short_name": "Summary",
+      "description": "View daily totals summary",
+      "url": "./#/summary"
+    }
+  ]
+}

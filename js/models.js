@@ -11,6 +11,15 @@ export const DEFAULT_DENOMINATION_TYPES = [
   { name: '$1',    value: 1     },
 ];
 
+export const DEFAULT_PLAQUE_TYPES = [
+  { name: '$10,000', value: 10000 },
+  { name: '$5,000', value: 5000 },
+  { name: '$1,000', value: 1000 },
+  { name: '$500',   value: 500  },
+  { name: '$100', value: 100 },
+  { name: '$50', value: 50 },
+];
+
 export const DEFAULT_SECTIONS_DATA = [
   { name: 'Outlet', tablesNames: ['Bar', 'Cage'] },
   { name: 'BJ',     tablesNames: ['BJ-1', 'BJ-2', 'BJ-3'] },
@@ -21,14 +30,14 @@ export const DEFAULT_SECTIONS_DATA = [
 // ── Factories ─────────────────────────────────────────────────────────────────
 
 export function createTable(name) {
-    return {
-        /* id: crypto.randomUUID(),*/
-        id: name,
-        name,
-        open: 0, close: 0, fill: 0, credit: 0, plaques: 0, cash: 0,
-        usdCash: 0, egpCash: 0,
-        denominationCounts: [],
-    };
+  return {
+    id: name,
+    name,
+    open: 0, close: 0, fill: 0, credit: 0, plaques: 0, cash: 0,
+    usdCash: 0, egpCash: 0,
+    denominationCounts: [],
+    plaqueCounts: [],          // counts per plaque denomination (drives table.plaques)
+  };
 }
 
 export function createSection(name) {
@@ -49,6 +58,12 @@ export function calcWin(table) {
 /** Single denomination row total */
 export function calcDenomTotal(denomCount) {
   return denomCount.count * denomCount.denominationType.value;
+}
+
+/** Plaque total derived from plaqueCounts */
+export function calcPlaques(table) {
+  if (!table.plaqueCounts?.length) return table.plaques;
+  return table.plaqueCounts.reduce((s, pc) => s + pc.count * pc.denominationType.value, 0);
 }
 
 /** Table total tips (USD chips + USD cash) */
