@@ -12,6 +12,7 @@ const PRECACHE_URLS = [
   './js/models.js',
   './js/router.js',
   './js/views/baseView.js',
+  './js/views/countCalcView.js',
   './js/views/mainView.js',
   './js/views/editTipsView.js',
   './js/views/editWinsView.js',

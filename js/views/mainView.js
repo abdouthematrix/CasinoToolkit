@@ -1,31 +1,30 @@
 // js/views/mainView.js
 import { BaseView } from './baseView.js';
 import {
-  calcWin, calcTotalTips,
-  calcSectionTotalTips, calcSectionTotalWins,
-  calcCasinoTotalTips,  calcCasinoTotalWins,
-  fmt, winClass,
+    calcWin, calcTotalTips,
+    calcSectionTotalTips, calcSectionTotalWins,
+    calcCasinoTotalTips, calcCasinoTotalWins,
+    fmt, winClass,
 } from '../models.js';
 
 export class MainView extends BaseView {
 
-  render() {
-    const data      = this.app.casinoData;
-    const totalTips = calcCasinoTotalTips(data);
-    const totalWins = calcCasinoTotalWins(data);
-    const isDark    = document.documentElement.dataset.theme !== 'light';
+    render() {
+        const data = this.app.casinoData;
+        const totalTips = calcCasinoTotalTips(data);
+        const totalWins = calcCasinoTotalWins(data);
+        const isDark = document.documentElement.dataset.theme !== 'light';
 
-    const sections = data.sections.map(s => this._section(s)).join('');
+        const sections = data.sections.map(s => this._section(s)).join('');
 
-    return /* html */`
+        return /* html */`
       <div class="main-nav">
         <div class="logo">Casino Toolkit<span>Daily Tracker</span></div>
         <div class="nav-actions">
           <button class="btn btn-secondary" id="btn-summary">Summary</button>
+          <button class="btn-icon" id="btn-count-calc" title="Chip Count Calculator">🧮</button>
           <button class="btn-icon" id="btn-theme" title="Toggle theme"
-                  aria-label="Toggle light/dark mode">
-            ${isDark ? '☀' : '🌙'}
-          </button>
+                  aria-label="Toggle light/dark mode">${isDark ? '☀' : '🌙'}</button>
           <button class="btn-icon" id="btn-settings" title="Settings">⚙</button>
         </div>
       </div>
@@ -48,16 +47,16 @@ export class MainView extends BaseView {
         </div>
       </div>
     `;
-  }
+    }
 
-  _section(section) {
-    const sTips = calcSectionTotalTips(section);
-    const sWins = calcSectionTotalWins(section);
+    _section(section) {
+        const sTips = calcSectionTotalTips(section);
+        const sWins = calcSectionTotalWins(section);
 
-    const tables = section.tables.map(table => {
-      const tips = calcTotalTips(table);
-      const win  = calcWin(table);
-      return /* html */`
+        const tables = section.tables.map(table => {
+            const tips = calcTotalTips(table);
+            const win = calcWin(table);
+            return /* html */`
         <div class="table-card">
           <div class="table-card-name">${table.name}</div>
           <div class="table-card-stats">
@@ -76,9 +75,9 @@ export class MainView extends BaseView {
           </div>
         </div>
       `;
-    }).join('');
+        }).join('');
 
-    return /* html */`
+        return /* html */`
       <div class="card section-card">
         <div class="section-header">
           <div class="section-name">${section.name}</div>
@@ -96,21 +95,21 @@ export class MainView extends BaseView {
         <div class="tables-grid">${tables}</div>
       </div>
     `;
-  }
+    }
 
-  bindEvents() {
-    this.on('#btn-summary',  'click', () => this.app.router.navigate('/summary'));
-    this.on('#btn-settings', 'click', () => this.app.router.navigate('/settings'));
-    this.on('#btn-theme',    'click', () => {
-      this.app.toggleTheme();
-      // Re-render to update the icon
-      this.mount(this.container, {});
-    });
+    bindEvents() {
+        this.on('#btn-summary', 'click', () => this.app.router.navigate('/summary'));
+        this.on('#btn-count-calc', 'click', () => this.app.router.navigate('/count-calc'));
+        this.on('#btn-settings', 'click', () => this.app.router.navigate('/settings'));
+        this.on('#btn-theme', 'click', () => {
+            this.app.toggleTheme();
+            this.mount(this.container, {});
+        });
 
-    this.onAll('[data-action]', 'click', e => {
-      const { action, id } = e.currentTarget.dataset;
-      if (action === 'tips') this.app.router.navigate(`/edit-tips/${id}`);
-      if (action === 'wins') this.app.router.navigate(`/edit-wins/${id}`);
-    });
-  }
+        this.onAll('[data-action]', 'click', e => {
+            const { action, id } = e.currentTarget.dataset;
+            if (action === 'tips') this.app.router.navigate(`/edit-tips/${id}`);
+            if (action === 'wins') this.app.router.navigate(`/edit-wins/${id}`);
+        });
+    }
 }

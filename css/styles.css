@@ -841,3 +841,271 @@ body::after {
     .calc-hist-remove:hover {
         color: var(--red);
     }
+
+/* ============================================================
+   Chip Count Calculator — append to styles.css
+   ============================================================ */
+
+/* ── Running total card ─────────────────────────────────────── */
+.cnt-total-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--bg-card);
+    border: 1px solid var(--border-accent);
+    border-radius: var(--radius-lg);
+    padding: 14px 18px;
+    margin-bottom: 16px;
+}
+
+.cnt-total-label {
+    font-size: 10px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    margin-bottom: 4px;
+}
+
+.cnt-total-value {
+    font-family: var(--font-mono);
+    font-size: 32px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    transition: color .2s;
+}
+
+.cnt-total-nonzero {
+    color: var(--gold);
+}
+
+.cnt-clear-btn {
+    background: transparent;
+    border: 1px solid rgba(201,80,80,.3);
+    color: var(--red);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    padding: 7px 13px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: background .13s, border-color .13s;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+    .cnt-clear-btn:hover {
+        background: var(--red-bg);
+        border-color: var(--red);
+    }
+
+/* ── Denomination grid ──────────────────────────────────────── */
+.cnt-grid {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    margin-bottom: 16px;
+}
+
+.cnt-row {
+    border-bottom: 1px solid var(--border);
+    transition: background .1s;
+}
+
+    .cnt-row:last-child {
+        border-bottom: none;
+    }
+
+    .cnt-row:hover {
+        background: var(--bg-card-alt);
+    }
+
+/* Top line: label | stepper | subtotal */
+.cnt-row-top {
+    display: grid;
+    grid-template-columns: 74px 1fr 80px;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px 4px;
+}
+
+.cnt-label {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--gold);
+    white-space: nowrap;
+}
+
+/* ── Stepper ─────────────────────────────────────────────────── */
+.cnt-stepper {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.cnt-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border-accent);
+    background: var(--bg-card-alt);
+    color: var(--text-secondary);
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background .1s, border-color .1s, color .1s, transform .07s;
+    font-family: var(--font-mono);
+    user-select: none;
+}
+
+    .cnt-btn:active {
+        transform: scale(.90);
+    }
+
+.cnt-dec:hover {
+    background: var(--red-bg);
+    border-color: var(--red);
+    color: var(--red);
+}
+
+.cnt-inc:hover {
+    background: rgba(74,184,126,.12);
+    border-color: var(--win-pos);
+    color: var(--win-pos);
+}
+
+.cnt-input {
+    flex: 1;
+    min-width: 0;
+    text-align: center;
+    background: var(--bg-input);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+    font-size: 15px;
+    padding: 5px 4px;
+    transition: border-color .15s, box-shadow .15s;
+    -moz-appearance: textfield;
+}
+
+    .cnt-input::-webkit-inner-spin-button,
+    .cnt-input::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    .cnt-input:focus {
+        outline: none;
+        border-color: var(--gold-dim);
+        box-shadow: 0 0 0 2px rgba(201,168,76,.13);
+    }
+
+/* ── Row subtotal ────────────────────────────────────────────── */
+.cnt-subtotal {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-muted);
+    text-align: right;
+    white-space: nowrap;
+    transition: color .15s;
+}
+
+.cnt-subtotal-active {
+    color: var(--gold-dim);
+}
+
+/* ── Quick preset row (chip SVG buttons) ─────────────────────── */
+.cnt-quick-row {
+    display: flex;
+    gap: 6px;
+    padding: 4px 14px 8px;
+}
+
+.cnt-quick-preset {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: var(--radius);
+    padding: 4px 8px;
+    cursor: pointer;
+    transition: background .12s, border-color .12s, transform .08s;
+    line-height: 1;
+}
+
+    .cnt-quick-preset:hover {
+        background: rgba(201,168,76,.07);
+        border-color: var(--border-accent);
+    }
+
+    .cnt-quick-preset:active {
+        transform: scale(.93);
+    }
+
+/* SVG chip stack inside button */
+.cnt-chip-svg {
+    height: 38px;
+    width: auto;
+    pointer-events: none;
+    display: block;
+}
+
+.cnt-quick-label {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    white-space: nowrap;
+}
+
+.cnt-quick-preset:hover .cnt-quick-label {
+    color: var(--gold-dim);
+}
+
+/* ── Responsive ─────────────────────────────────────────────── */
+@media (max-width: 380px) {
+    .cnt-row-top {
+        grid-template-columns: 60px 1fr 66px;
+        gap: 5px;
+        padding: 7px 10px 3px;
+    }
+
+    .cnt-quick-row {
+        padding: 3px 10px 7px;
+        gap: 4px;
+    }
+
+    .cnt-label {
+        font-size: 11px;
+    }
+
+    .cnt-btn {
+        width: 28px;
+        height: 28px;
+        font-size: 16px;
+    }
+
+    .cnt-input {
+        font-size: 13px;
+    }
+
+    .cnt-subtotal {
+        font-size: 11px;
+    }
+
+    .cnt-chip-svg {
+        height: 30px;
+    }
+
+    .cnt-total-value {
+        font-size: 26px;
+    }
+}

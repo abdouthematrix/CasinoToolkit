@@ -1,6 +1,6 @@
 {
   "name": "Casino Toolkit",
-  "short_name": "CasinoKit",
+  "short_name": "CasinoToolkit",
   "description": "Daily casino tracker for tips and wins across all tables and sections",
   "start_url": "./",
   "scope": "./",
@@ -8,7 +8,7 @@
   "orientation": "portrait-primary",
   "background_color": "#07100a",
   "theme_color": "#07100a",
-  "categories": ["finance", "utilities"],
+  "categories": [ "finance", "utilities" ],
   "icons": [
     {
       "src": "favicon.svg",
@@ -19,6 +19,18 @@
   ],
   "screenshots": [],
   "shortcuts": [
+    {
+      "name": "Chip Count",
+      "short_name": "ChipCount",
+      "description": "Calculate chip count based on table and section",
+      "url": "./#/count-calc"
+    },
+    {
+      "name": "Settings",
+      "short_name": "Settings",
+      "description": "Configure tables, sections, and other settings",
+      "url": "./#/settings"
+    },
     {
       "name": "Summary",
       "short_name": "Summary",
