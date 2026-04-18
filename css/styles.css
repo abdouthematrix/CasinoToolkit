@@ -749,3 +749,95 @@ body::after {
         height: 36px;
         pointer-events: none;
     }
+
+/* ============================================================
+   CalcEntry CSS — append/replace in styles.css
+   ============================================================ */
+
+/* ── CalcEntry section: full-width stack, matches MAUI ColumnSpan="2" ─── */
+.wins-calc-section {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+/* ── Label row: no space-between needed (saved badge removed) ─────────── */
+.calc-entry-label-row {
+    display: flex;
+    align-items: center;
+    padding: 7px 12px 5px;
+    border-bottom: 1px solid var(--border);
+}
+
+/* ── Undo button ─────────────────────────────────────────────────────── */
+.btn-calc-undo {
+    background: rgba(201, 168, 76, .06);
+    border-color: rgba(201, 168, 76, .22);
+    color: var(--gold-dim);
+    font-size: 14px;
+}
+
+    .btn-calc-undo:hover:not(:disabled) {
+        background: rgba(201, 168, 76, .16);
+        border-color: var(--gold-dim);
+        color: var(--gold);
+    }
+
+    .btn-calc-undo:disabled {
+        opacity: .28;
+        cursor: not-allowed;
+    }
+
+/* ── Entry history strip ─────────────────────────────────────────────── */
+.calc-history {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 10px 8px;
+    border-top: 1px dashed var(--border);
+}
+
+.calc-hist-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 7px 2px 9px;
+    background: rgba(201, 168, 76, .07);
+    border: 1px solid var(--gold-dim);
+    border-radius: 20px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--gold);
+    white-space: nowrap;
+    transition: background .12s;
+}
+
+    .calc-hist-chip:hover {
+        background: rgba(201, 168, 76, .14);
+    }
+
+[data-theme="light"] .calc-hist-chip {
+    background: rgba(122, 84, 0, .07);
+    color: var(--gold);
+    border-color: var(--gold);
+}
+
+.calc-hist-remove {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-muted);
+    font-size: 13px;
+    line-height: 1;
+    padding: 0;
+    transition: color .12s;
+}
+
+    .calc-hist-remove:hover {
+        color: var(--red);
+    }
