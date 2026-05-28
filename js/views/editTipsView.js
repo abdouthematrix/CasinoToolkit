@@ -81,7 +81,7 @@ export class EditTipsView extends BaseView {
     }
 
     _renderQuickStacks(index) {
-        const options = [5, 10, 20, 100];
+        const options = [1, 5, 10, 20, 100];
 
         return options.map(chips => /* html */`
     <div class="quick-stack" title="Add ${chips} chips"
