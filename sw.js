@@ -1,7 +1,7 @@
 // sw.js — Casino Toolkit Service Worker
 // Cache-first strategy for all app assets (offline-first PWA)
 
-const CACHE_NAME   = 'casino-toolkit-v1';
+const CACHE_NAME   = 'casino-toolkit-v1.1';
 const PRECACHE_URLS = [
   './',
   './index.html',
